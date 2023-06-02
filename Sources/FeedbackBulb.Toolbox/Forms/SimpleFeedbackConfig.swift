@@ -15,7 +15,7 @@ public struct SimpleFeedbackConfig {
     textDescription: String = "Remember not to include personal information.",
     textAccessibilityLabel: String = "Enter feedback",
     submitButtonLabel: String = "Submit",
-    showEmail: Bool = true,
+    showEmail: Bool = false,
     emailLabel: String = "Email",
     emailPlaceholder: String = "Type your email address",
     debugRequests: Bool = true,
