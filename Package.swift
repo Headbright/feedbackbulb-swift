@@ -7,7 +7,8 @@ let package = Package(
   name: "FeedbackBulb",
   platforms: [
     .iOS(.v16),
-    .macCatalyst(.v16)
+    .macCatalyst(.v16),
+    .macOS(.v13),
   ],
   products: [
     // Products define the executables and libraries a package produces, and make them visible to other packages.

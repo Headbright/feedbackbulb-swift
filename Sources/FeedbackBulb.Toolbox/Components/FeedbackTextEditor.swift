@@ -24,7 +24,9 @@ struct FeedbackTextEditor: View {
 
       TextEditor(text: $text)
         .introspectTextView(customize: { tv in
-          tv.isScrollEnabled = false
+          #if canImport(UIKit)
+            tv.isScrollEnabled = false
+          #endif
         })
         .accessibility(label: Text(label))
     }

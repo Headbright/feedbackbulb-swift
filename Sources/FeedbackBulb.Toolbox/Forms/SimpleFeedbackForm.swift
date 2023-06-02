@@ -8,178 +8,181 @@
 import PhotosUI
 import SwiftUI
 
-public struct SimpleFeedbackForm: View {
-  @StateObject var viewModel: SimpleFeedbackFormViewModel
-  @StateObject var imageModel = SelectImageModel()
-  @Environment(\.presentationMode) private var presentationMode
+#if canImport(UIKit)
 
-  public var body: some View {
-    ZStack(alignment: .bottom) {
-      ScrollView(
-        .vertical,
-        showsIndicators: true
-      ) {
-        VStack(alignment: .leading, spacing: 32) {
-          VStack(alignment: .leading) {
-            title
-            if !viewModel.config.subtitle.isEmpty {
-              Text(viewModel.config.subtitle)
-                .bold()
-            }
-          }
+  public struct SimpleFeedbackForm: View {
+    @StateObject var viewModel: SimpleFeedbackFormViewModel
+    @StateObject var imageModel = SelectImageModel()
+    @Environment(\.presentationMode) private var presentationMode
 
-          if viewModel.config.showEmojiPicker {
+    public var body: some View {
+      ZStack(alignment: .bottom) {
+        ScrollView(
+          .vertical,
+          showsIndicators: true
+        ) {
+          VStack(alignment: .leading, spacing: 32) {
             VStack(alignment: .leading) {
-              if !viewModel.config.emojiPickerLabel.isEmpty {
-                Text(viewModel.config.emojiPickerLabel)
+              title
+              if !viewModel.config.subtitle.isEmpty {
+                Text(viewModel.config.subtitle)
                   .bold()
               }
-              EmojiPicker(mood: $viewModel.emoji, items: viewModel.config.emojis)
             }
-          }
 
-          if viewModel.config.showEmail {
+            if viewModel.config.showEmojiPicker {
+              VStack(alignment: .leading) {
+                if !viewModel.config.emojiPickerLabel.isEmpty {
+                  Text(viewModel.config.emojiPickerLabel)
+                    .bold()
+                }
+                EmojiPicker(mood: $viewModel.emoji, items: viewModel.config.emojis)
+              }
+            }
+
+            if viewModel.config.showEmail {
+              VStack(alignment: .leading) {
+                if !viewModel.config.emailLabel.isEmpty {
+                  Text(viewModel.config.emailLabel)
+                    .bold()
+                }
+                TextField(
+                  text: $viewModel.email, prompt: Text(viewModel.config.emailPlaceholder), label: {}
+                )
+                .textFieldStyle(.roundedBorder)
+                .textInputAutocapitalization(.never)
+              }
+            }
+
             VStack(alignment: .leading) {
-              if !viewModel.config.emailLabel.isEmpty {
-                Text(viewModel.config.emailLabel)
+              if !viewModel.config.textLabel.isEmpty {
+                Text(viewModel.config.textLabel)
                   .bold()
               }
-              TextField(
-                text: $viewModel.email, prompt: Text(viewModel.config.emailPlaceholder), label: {}
+
+              Text(viewModel.config.textDescription)
+                .font(.subheadline)
+              FeedbackTextEditor(
+                label: viewModel.config.textAccessibilityLabel, text: $viewModel.content
               )
-              .textFieldStyle(.roundedBorder)
-              .textInputAutocapitalization(.never)
-            }
-          }
-
-          VStack(alignment: .leading) {
-            if !viewModel.config.textLabel.isEmpty {
-              Text(viewModel.config.textLabel)
-                .bold()
+              .frame(minHeight: 160)
             }
 
-            Text(viewModel.config.textDescription)
-              .font(.subheadline)
-            FeedbackTextEditor(
-              label: viewModel.config.textAccessibilityLabel, text: $viewModel.content
-            )
-            .frame(minHeight: 160)
-          }
+            if viewModel.config.showAddImage {
+              VStack(alignment: .leading) {
+                if !viewModel.config.addImageLabel.isEmpty {
+                  Text(viewModel.config.addImageLabel)
+                    .bold()
+                }
 
-          if viewModel.config.showAddImage {
-            VStack(alignment: .leading) {
-              if !viewModel.config.addImageLabel.isEmpty {
-                Text(viewModel.config.addImageLabel)
-                  .bold()
+                EditableSquareSelectImage(viewModel: imageModel)
               }
-
-              EditableSquareSelectImage(viewModel: imageModel)
             }
           }
+          .padding(.horizontal)
+          .padding(.bottom, 120)
         }
-        .padding(.horizontal)
-        .padding(.bottom, 120)
+        .alwaysBounceVertical(false)
+        .onChange(
+          of: imageModel.imageData,
+          perform: { data in
+            viewModel.imageData = data
+          })
+
+        self.footer
       }
-      .alwaysBounceVertical(false)
-      .onChange(
-        of: imageModel.imageData,
-        perform: { data in
-          viewModel.imageData = data
-        })
-
-      self.footer
+      .background(Color(UIColor.systemGroupedBackground))
+      .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
     }
-    .background(Color(UIColor.systemGroupedBackground))
-    .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
-  }
 
-  var title: some View {
-    Text(
-      viewModel.config.title
-    )
-    .font(.largeTitle.bold())
-    .multilineTextAlignment(.center)
-    .fixedSize(horizontal: false, vertical: true)
-  }
+    var title: some View {
+      Text(
+        viewModel.config.title
+      )
+      .font(.largeTitle.bold())
+      .multilineTextAlignment(.center)
+      .fixedSize(horizontal: false, vertical: true)
+    }
 
-  var footer: some View {
-    HStack(alignment: .bottom) {
-      Button(
-        action: {
-          Task {
-            try? await self.viewModel.primaryAction()
+    var footer: some View {
+      HStack(alignment: .bottom) {
+        Button(
+          action: {
+            Task {
+              try? await self.viewModel.primaryAction()
+            }
+            self.presentationMode.wrappedValue.dismiss()
           }
-          self.presentationMode.wrappedValue.dismiss()
+        ) {
+          Text(viewModel.config.submitButtonLabel)
         }
-      ) {
-        Text(viewModel.config.submitButtonLabel)
+        .buttonStyle(
+          SubmitButtonStyle()
+        )
+        .padding()
+        .background(
+          Rectangle().fill(Color(UIColor.systemBackground)).ignoresSafeArea(
+            .container, edges: .bottom)
+        )
+        .shadow(color: Color.black.opacity(0.16), radius: 6, x: 0, y: 3)
       }
-      .buttonStyle(
-        SubmitButtonStyle()
-      )
-      .padding()
-      .background(
-        Rectangle().fill(Color(UIColor.systemBackground)).ignoresSafeArea(
-          .container, edges: .bottom)
-      )
-      .shadow(color: Color.black.opacity(0.16), radius: 6, x: 0, y: 3)
     }
   }
-}
 
-extension SimpleFeedbackForm {
-  public init(appKey: String) {
-    self.init(viewModel: SimpleFeedbackFormViewModel(appKey: appKey))
-  }
-  public init(appKey: String, config: SimpleFeedbackConfig) {
-    self.init(viewModel: SimpleFeedbackFormViewModel(appKey: appKey, config))
-  }
-}
-
-struct FooterPadding {
-  #if os(iOS)
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
-  #endif
-}
-
-extension FooterPadding: ViewModifier {
-  func body(
-    content: Content
-  ) -> some View {
-    if self.horizontalSizeClass == .regular {
-      content.padding(
-        .init(
-          top: 0,
-          leading: 150,
-          bottom: 50,
-          trailing: 150
-        )
-      )
-    } else if self.verticalSizeClass == .compact {
-      content.padding(
-        .init(
-          top: 0,
-          leading: 40,
-          bottom: 35,
-          trailing: 40
-        )
-      )
-    } else {
-      content.padding(
-        .init(
-          top: 0,
-          leading: 20,
-          bottom: 80,
-          trailing: 20
-        )
-      )
+  extension SimpleFeedbackForm {
+    public init(appKey: String) {
+      self.init(viewModel: SimpleFeedbackFormViewModel(appKey: appKey))
+    }
+    public init(appKey: String, config: SimpleFeedbackConfig) {
+      self.init(viewModel: SimpleFeedbackFormViewModel(appKey: appKey, config))
     }
   }
-}
 
-struct SimpleFeedbackForm_Previews: PreviewProvider {
-  static var previews: some View {
-    SimpleFeedbackForm(appKey: "")
+  struct FooterPadding {
+    #if os(iOS)
+      @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+      @Environment(\.verticalSizeClass) private var verticalSizeClass
+    #endif
   }
-}
+
+  extension FooterPadding: ViewModifier {
+    func body(
+      content: Content
+    ) -> some View {
+      if self.horizontalSizeClass == .regular {
+        content.padding(
+          .init(
+            top: 0,
+            leading: 150,
+            bottom: 50,
+            trailing: 150
+          )
+        )
+      } else if self.verticalSizeClass == .compact {
+        content.padding(
+          .init(
+            top: 0,
+            leading: 40,
+            bottom: 35,
+            trailing: 40
+          )
+        )
+      } else {
+        content.padding(
+          .init(
+            top: 0,
+            leading: 20,
+            bottom: 80,
+            trailing: 20
+          )
+        )
+      }
+    }
+  }
+
+  struct SimpleFeedbackForm_Previews: PreviewProvider {
+    static var previews: some View {
+      SimpleFeedbackForm(appKey: "")
+    }
+  }
+#endif
