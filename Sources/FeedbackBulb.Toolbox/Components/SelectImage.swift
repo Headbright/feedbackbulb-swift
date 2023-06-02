@@ -36,7 +36,7 @@ struct SquareSelectImage: View {
   var body: some View {
     SelectImage(imageState: imageState)
       .scaledToFill()
-      .frame(width: 60, height: 60)
+      .frame(width: 80, height: 80)
       .clipShape(RoundedRectangle(cornerRadius: 8))
       .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor, lineWidth: 0.5))
   }

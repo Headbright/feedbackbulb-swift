@@ -14,20 +14,36 @@ public struct SimpleFeedbackForm: View {
   @Environment(\.presentationMode) private var presentationMode
 
   public var body: some View {
-    ZStack {
+    ZStack(alignment: .bottom) {
       ScrollView(
         .vertical,
         showsIndicators: true
       ) {
-        VStack(alignment: .leading, spacing: 28) {
+        VStack(alignment: .leading, spacing: 32) {
           VStack(alignment: .leading) {
             title
-            Text(viewModel.config.subtitle)
+            if !viewModel.config.subtitle.isEmpty {
+              Text(viewModel.config.subtitle)
+                .bold()
+            }
+          }
+
+          if viewModel.config.showEmojiPicker {
+            VStack(alignment: .leading) {
+              if !viewModel.config.emojiPickerLabel.isEmpty {
+                Text(viewModel.config.emojiPickerLabel)
+                  .bold()
+              }
+              EmojiPicker(mood: $viewModel.emoji, items: viewModel.config.emojis)
+            }
           }
 
           if viewModel.config.showEmail {
             VStack(alignment: .leading) {
-              Text(viewModel.config.emailLabel)
+              if !viewModel.config.emailLabel.isEmpty {
+                Text(viewModel.config.emailLabel)
+                  .bold()
+              }
               TextField(
                 text: $viewModel.email, prompt: Text(viewModel.config.emailPlaceholder), label: {}
               )
@@ -37,8 +53,11 @@ public struct SimpleFeedbackForm: View {
           }
 
           VStack(alignment: .leading) {
-            Text(viewModel.config.textLabel)
-              .bold()
+            if !viewModel.config.textLabel.isEmpty {
+              Text(viewModel.config.textLabel)
+                .bold()
+            }
+
             Text(viewModel.config.textDescription)
               .font(.subheadline)
             FeedbackTextEditor(
@@ -49,12 +68,17 @@ public struct SimpleFeedbackForm: View {
 
           if viewModel.config.showAddImage {
             VStack(alignment: .leading) {
-              Text(viewModel.config.addImageLabel)
+              if !viewModel.config.addImageLabel.isEmpty {
+                Text(viewModel.config.addImageLabel)
+                  .bold()
+              }
+
               EditableSquareSelectImage(viewModel: imageModel)
             }
           }
         }
         .padding(.horizontal)
+        .padding(.bottom, 120)
       }
       .alwaysBounceVertical(false)
       .onChange(
@@ -63,14 +87,10 @@ public struct SimpleFeedbackForm: View {
           viewModel.imageData = data
         })
 
-      VStack {
-        Spacer()
-        self.footer
-          .modifier(FooterPadding())
-      }
-      .edgesIgnoringSafeArea(.bottom)
+      self.footer
     }
     .background(Color(UIColor.systemGroupedBackground))
+    .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
   }
 
   var title: some View {
@@ -83,7 +103,7 @@ public struct SimpleFeedbackForm: View {
   }
 
   var footer: some View {
-    VStack {
+    HStack(alignment: .bottom) {
       Button(
         action: {
           Task {
@@ -97,6 +117,12 @@ public struct SimpleFeedbackForm: View {
       .buttonStyle(
         SubmitButtonStyle()
       )
+      .padding()
+      .background(
+        Rectangle().fill(Color(UIColor.systemBackground)).ignoresSafeArea(
+          .container, edges: .bottom)
+      )
+      .shadow(color: Color.black.opacity(0.16), radius: 6, x: 0, y: 3)
     }
   }
 }

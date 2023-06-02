@@ -20,7 +20,21 @@ public struct SimpleFeedbackConfig {
     emailPlaceholder: String = "Type your email address",
     debugRequests: Bool = true,
     showAddImage: Bool = true,
-    addImageLabel: String = "Include a screenshot"
+    addImageLabel: String = "Include a screenshot",
+    showEmojiPicker: Bool = false,
+    emojiPickerLabel: String = "How do you feel about this app?",
+    emojis: [String] = [
+      "😁",
+      "🤔",
+      "🥵",
+      "🙁",
+      "🤘",
+      "🚀",
+      "🤯",
+      "🎉",
+      "🔥",
+      "🙌",
+    ]
   ) {
     self.title = title
     self.subtitle = subtitle
@@ -34,6 +48,9 @@ public struct SimpleFeedbackConfig {
     self.debugRequests = debugRequests
     self.showAddImage = showAddImage
     self.addImageLabel = addImageLabel
+    self.showEmojiPicker = showEmojiPicker
+    self.emojiPickerLabel = emojiPickerLabel
+    self.emojis = emojis
   }
 
   var title: String
@@ -48,4 +65,7 @@ public struct SimpleFeedbackConfig {
   var debugRequests: Bool
   var showAddImage: Bool
   var addImageLabel: String
+  var showEmojiPicker: Bool
+  var emojiPickerLabel: String
+  var emojis: [String]
 }
