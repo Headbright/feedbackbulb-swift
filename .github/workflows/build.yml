@@ -1,0 +1,22 @@
+name: Build
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths-ignore:
+      - "*.md"
+      - ".vscode"
+      - ".nova"
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build
+        run: swift build -v
+      - name: Run tests
+        run: swift test -v
