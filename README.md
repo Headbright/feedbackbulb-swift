@@ -11,7 +11,7 @@ Quick start instructions [available here](https://docs.feedbackbulb.com/platform
 
 ## License
 
-FeedbackBulb Web SDK is licensed with the BSD-3-Clause license, more information is [available here](LICENSE).
+FeedbackBulb Swift SDK is licensed with the BSD-3-Clause license, more information is [available here](LICENSE).
 
 This is a permissive license which allows for any type of use, provided the copyright notice is included.
 
