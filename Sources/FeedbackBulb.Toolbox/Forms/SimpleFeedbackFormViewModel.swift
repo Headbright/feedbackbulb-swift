@@ -26,7 +26,7 @@ final class SimpleFeedbackFormViewModel: ObservableObject {
       client.debugOff()
     }
 
-    let _ = try await client.reportValue(
+    try await client.reportValue(
       content: content, file: imageData, mimeType: "image/jpeg", email: email,
       attrs: getAttributes())
     #if os(iOS)

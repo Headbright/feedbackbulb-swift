@@ -159,12 +159,11 @@ extension FeedbackSDKClient {
 }
 
 extension FeedbackSDKClient {
+
   public func reportValue(
     content: String, file: Data? = nil, mimeType: String? = nil, email: String? = nil,
     attrs: [String: String]? = nil
-  ) async throws
-    -> FeedbackValueResponse
-  {
+  ) async throws {
     let req = try HTTPRequestBuilder {
       $0.url = getURL(["api", "values"])
       $0.method = .post
@@ -225,6 +224,6 @@ extension FeedbackSDKClient {
 
       $0.body = try .multipart(parts, boundary: UUID().uuidString)
     }
-    return try await fetch(FeedbackValueResponse.self, req)
+    let _ = try await fetch(req: req)
   }
 }
