@@ -28,5 +28,4 @@ docs: ## Generate DocC output
 			--disable-indexing \
 			--transform-for-static-hosting \
 			--hosting-base-path feedbackbulb-swift \
-			--target FeedbackBulb --output-path $(DOCUMENTATION_PATH) \
 			--target FeedbackBulb.Toolbox --output-path $(DOCUMENTATION_PATH)
