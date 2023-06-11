@@ -17,25 +17,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - name: Update git config
-        run: git config --local user.name "runner"
-      - name: Setup gh-pages worktree
-        run: git worktree add --checkout gh-pages origin/gh-pages
       - name: make docs
-        run: make DOCUMENTATION_PATH=./gh-pages/docs docs
-      - name: Update GitHub Page
-        run: |
-          CURRENT_COMMIT_HASH=`git rev-parse --short HEAD`
-          cd gh-pages
-          git add docs
-
-          if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "Update documentation from '$CURRENT_COMMIT_HASH'."
-            git push origin HEAD:gh-pages
-          else
-            echo "No documentation changes found."
-          fi
-
-          cd ..
-      - name: Clear git worktree
-        run: git worktree remove gh-pages
+        run: make docs
+      # Commit all changed files back to the repository
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: docs
+          create_branch: true
+          push_options: "--force"
