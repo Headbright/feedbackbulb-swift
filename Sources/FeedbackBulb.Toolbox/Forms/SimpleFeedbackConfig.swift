@@ -34,7 +34,8 @@ public struct SimpleFeedbackConfig {
       "🎉",
       "🔥",
       "🙌",
-    ]
+    ],
+    pinSubmitButton: Bool = false
   ) {
     self.title = title
     self.subtitle = subtitle
@@ -51,6 +52,7 @@ public struct SimpleFeedbackConfig {
     self.showEmojiPicker = showEmojiPicker
     self.emojiPickerLabel = emojiPickerLabel
     self.emojis = emojis
+    self.pinSubmitButton = pinSubmitButton
   }
 
   var title: String
@@ -68,4 +70,5 @@ public struct SimpleFeedbackConfig {
   var showEmojiPicker: Bool
   var emojiPickerLabel: String
   var emojis: [String]
+  var pinSubmitButton: Bool
 }

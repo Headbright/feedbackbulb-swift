@@ -1,5 +1,4 @@
 import Foundation
-import MultipartKit
 
 #if canImport(FoundationNetworking)
   import FoundationNetworking
@@ -8,8 +7,6 @@ import MultipartKit
 public struct FeedbackSDKClient {
   /// The URL of the instance we're connected to
   public var instanceURL: URL
-  /// Set this to `true` to see a logger output of outgoing requests.
-  public var debugRequests: Bool = false
   /// Set this to `true` to see a logger output of request response.
   public var debugResponses: Bool = false
   /// Set this to `true` to see a logger outputfor instance information.
@@ -33,14 +30,12 @@ public struct FeedbackSDKClient {
 
   /// Prints extra debug details like outgoing requests and responses
   public mutating func debugOn() {
-    self.debugRequests = true
     self.debugResponses = true
     self.debugInstance = true
   }
 
   /// Stops printing debug details
   public mutating func debugOff() {
-    self.debugRequests = false
     self.debugResponses = false
     self.debugInstance = false
   }
@@ -56,7 +51,7 @@ extension FeedbackSDKClient {
       let description = fetchError(T.self, data: data)
 
       if debugResponses {
-        zofxLogger.debug("\(description)")
+        loggerResponse.debug("\(description, privacy: .public)")
       }
 
       throw FeedbackSDKError.decodingError(description)
@@ -73,7 +68,7 @@ extension FeedbackSDKClient {
       let description = fetchError(T.self, data: data)
 
       if debugResponses {
-        zofxLogger.debug("\(description)")
+        loggerResponse.debug("\(description, privacy: .public)")
       }
 
       throw FeedbackSDKError.decodingError(description)
@@ -105,16 +100,17 @@ extension FeedbackSDKClient {
 
   /// Fetch data asynchronously and return the raw response.
   internal func fetch(req: HTTPRequestBuilder) async throws -> (Data, HTTPURLResponse) {
-    if req.headers.index(forKey: "Content-Type") == nil {
-      req.headers["Content-Type"] = "application/json"
+
+    if req.body.headers.index(forKey: "Content-Type") == nil {
+      req.body.headers["Content-Type"] = "application/json"
     }
 
-    if req.headers.index(forKey: "Accept") == nil {
-      req.headers["Accept"] = "application/json"
+    if req.body.headers.index(forKey: "Accept") == nil {
+      req.body.headers["Accept"] = "application/json"
     }
 
-    if req.headers.index(forKey: "User-Agent") == nil {
-      req.headers["User-Agent"] = "FeedbackSDKSwift"
+    if req.body.headers.index(forKey: "User-Agent") == nil {
+      req.body.headers["User-Agent"] = "Swift feedbackbulb.com"
     }
 
     let request = try req.build()
@@ -122,17 +118,6 @@ extension FeedbackSDKClient {
   }
 
   internal func dataTask(_ request: URLRequest) async throws -> (Data, HTTPURLResponse) {
-    if debugRequests {
-      zofxLogger.debug("➡️ 🌏 \(request.httpMethod ?? "-") \(request.url?.absoluteString ?? "-")")
-      for (k, v) in request.allHTTPHeaderFields ?? [:] {
-        zofxLogger.debug("➡️ 🏷️ '\(k)': '\(v)'")
-      }
-      if let httpBody = request.httpBody {
-        zofxLogger.debug(
-          "➡️ 💿 \(String(describing: httpBody.prettyPrintedJSONString ?? String(data: httpBody, encoding: .utf8) ?? "Undecodable"))"
-        )
-      }
-    }
     let (data, response) = try await session.data(for: request)
 
     guard let httpResponse = response as? HTTPURLResponse else {
@@ -140,14 +125,14 @@ extension FeedbackSDKClient {
     }
 
     if debugResponses {
-      zofxLogger.debug("⬅️ 🌍 \(httpResponse.url?.absoluteString ?? "-")")
-      zofxLogger.debug("⬅️ 🚦 HTTP \(httpResponse.statusCode)")
-      for (k, v) in httpResponse.allHeaderFields {
-        zofxLogger.debug("⬅️ 🏷️ '\(k)': '\(String(describing: v))'")
-      }
-      zofxLogger.debug(
-        "⬅️ 💿 \(String(describing: data.prettyPrintedJSONString ?? String(data: data, encoding: .utf8) ?? "Undecodable"))"
+      loggerResponse.debug(
+        "⬅️ 🌍 \(httpResponse.url?.absoluteString ?? "-", privacy: .public) HTTP \(httpResponse.statusCode)"
       )
+      for (k, v) in httpResponse.allHeaderFields {
+        loggerResponse.debug(
+          "⬅️ 🏷️ '\(k, privacy: .public)': '\(String(describing: v), privacy: .public)'")
+      }
+      loggerResponse.debug("⬅️ Body: \(data.prettyPrintedJSONStringOrString, privacy: .public)")
     }
 
     guard validStatusCodes.contains(httpResponse.statusCode) else {
@@ -160,69 +145,54 @@ extension FeedbackSDKClient {
 
 extension FeedbackSDKClient {
 
-  public func reportValue(
-    content: String, file: Data? = nil, mimeType: String? = nil, email: String? = nil,
+  public func submitFeedback(content: String, attrs: [String: String]? = nil) async throws {
+    let req = HTTPRequestBuilder {
+      $0.url = getURL(["api", "values"])
+      $0.method = .post
+      $0.body = .multipart {
+        HTTPBody.subPart(variable: "value[key]", value: appKey)
+        HTTPBody.subPart(variable: "value[content]", value: content)
+
+        if let attrs = attrs {
+          for (k, v) in attrs {
+            HTTPBody.subPart(variable: "value[attributes][\(k)]", value: v)
+          }
+        }
+      }
+    }
+
+    let _ = try await fetch(req: req)
+  }
+
+  public func submitFeedback(
+    content: String, fileName: String, file: Data? = nil, mimeType: String? = nil,
+    email: String? = nil,
     attrs: [String: String]? = nil
   ) async throws {
+
     let req = try HTTPRequestBuilder {
       $0.url = getURL(["api", "values"])
       $0.method = .post
-      var parts = [MultipartPart]()
-      parts.append(
-        MultipartPart(
-          headers: [
-            "Content-Disposition": "form-data; name=\"value[key]\""
-          ],
-          body: appKey
-        )
-      )
-      parts.append(
-        MultipartPart(
-          headers: [
-            "Content-Disposition": "form-data; name=\"value[content]\""
-          ],
-          body: content
-        )
-      )
-      if let file, let mimeType {
-        parts.append(
-          MultipartPart(
-            headers: [
-              "Content-Disposition": "form-data; name=\"file\"; filename=\"screenshot.jpeg\"",
-              "Content-Type": mimeType,
-            ],
-            body: file
-          )
-        )
-      }
+      $0.body = try .multipart {
+        HTTPBody.subPart(variable: "value[key]", value: appKey)
+        HTTPBody.subPart(variable: "value[content]", value: content)
 
-      if let trimmedEmail = email?.trimmingCharacters(in: .whitespacesAndNewlines),
-        !trimmedEmail.isEmpty
-      {
-        parts.append(
-          MultipartPart(
-            headers: [
-              "Content-Disposition": "form-data; name=\"value[email]\""
-            ],
-            body: trimmedEmail
-          )
-        )
-      }
+        if let file, let mimeType {
+          try HTTPBody.subPart(field: "file", fileName: fileName, mimeType: mimeType, data: file)
+        }
 
-      if let attrs = attrs {
-        for (k, v) in attrs {
-          parts.append(
-            MultipartPart(
-              headers: [
-                "Content-Disposition": "form-data; name=\"value[attributes][\(k)]\""
-              ],
-              body: v
-            )
-          )
+        if let trimmedEmail = email?.trimmingCharacters(in: .whitespacesAndNewlines),
+          !trimmedEmail.isEmpty
+        {
+          HTTPBody.subPart(variable: "value[email]", value: trimmedEmail)
+        }
+
+        if let attrs = attrs {
+          for (k, v) in attrs {
+            HTTPBody.subPart(variable: "value[attributes][\(k)]", value: v)
+          }
         }
       }
-
-      $0.body = try .multipart(parts, boundary: UUID().uuidString)
     }
     let _ = try await fetch(req: req)
   }

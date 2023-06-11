@@ -37,7 +37,7 @@ internal final class HTTPRequestBuilder: HTTPRequest {
 
   var method: HTTPMethod = .get
 
-  var headers: [String: String] = [:]
+  //  var headers: [String: String] = [:]
 
   /// Add a new query parameter to the query string's value.
   ///
@@ -66,7 +66,7 @@ internal final class HTTPRequestBuilder: HTTPRequest {
     set { urlComponents.queryItems = newValue }
   }
 
-  var body: HTTPBody?
+  var body: HTTPBody = .init(headers: [:])
 }
 
 extension HTTPRequestBuilder {
@@ -78,14 +78,8 @@ extension HTTPRequestBuilder {
 
     var urlRequest = URLRequest(url: url)
     urlRequest.httpMethod = method.rawValue
-    urlRequest.allHTTPHeaderFields = headers
-
-    if let body {
-      urlRequest.httpBody = body.content
-      for header in body.headers ?? [:] {
-        urlRequest.setValue(header.value, forHTTPHeaderField: header.key)
-      }
-    }
+    urlRequest.allHTTPHeaderFields = body.headers
+    urlRequest.httpBody = body.content
 
     return urlRequest
   }

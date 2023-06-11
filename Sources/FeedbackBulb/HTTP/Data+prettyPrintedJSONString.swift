@@ -13,4 +13,11 @@ extension Data {
 
     return prettyPrintedString as String
   }
+
+  var prettyPrintedJSONStringOrString: String {
+    if let prettyPrintedString = NSString(data: self, encoding: String.Encoding.utf8.rawValue) {
+      return prettyPrintedString as String
+    }
+    return "nil"
+  }
 }

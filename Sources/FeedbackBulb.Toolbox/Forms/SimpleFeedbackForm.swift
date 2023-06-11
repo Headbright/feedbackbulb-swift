@@ -78,18 +78,25 @@ import SwiftUI
                 EditableSquareSelectImage(viewModel: imageModel)
               }
             }
+
+            if !viewModel.config.pinSubmitButton {
+              self.footer
+            }
           }
           .padding(.horizontal)
-          .padding(.bottom, 120)
+          .if(viewModel.config.pinSubmitButton, transform: { $0.padding(.bottom, 120) })
         }
-        .alwaysBounceVertical(false)
+        .if(viewModel.config.pinSubmitButton, transform: { $0.alwaysBounceVertical(false) })
         .onChange(
           of: imageModel.imageData,
           perform: { data in
             viewModel.imageData = data
           })
 
-        self.footer
+        if viewModel.config.pinSubmitButton {
+          self.footer
+        }
+
       }
       .background(Color(UIColor.systemGroupedBackground))
       .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
@@ -104,7 +111,17 @@ import SwiftUI
       .fixedSize(horizontal: false, vertical: true)
     }
 
+    @ViewBuilder
     var footer: some View {
+      if viewModel.config.pinSubmitButton {
+        footerPinned
+      } else {
+        footerFixed
+      }
+    }
+
+    // Footer view which moves together with the soft keyboard when it appears on screen
+    var footerPinned: some View {
       HStack(alignment: .bottom) {
         Button(
           action: {
@@ -112,10 +129,11 @@ import SwiftUI
               try? await self.viewModel.primaryAction()
             }
             self.presentationMode.wrappedValue.dismiss()
+          },
+          label: {
+            Text(viewModel.config.submitButtonLabel)
           }
-        ) {
-          Text(viewModel.config.submitButtonLabel)
-        }
+        )
         .buttonStyle(
           SubmitButtonStyle()
         )
@@ -126,6 +144,27 @@ import SwiftUI
             .ignoresSafeArea(.all, edges: .bottom)
         )
         .shadow(color: Color.black.opacity(0.16), radius: 6, x: 0, y: 3)
+      }
+    }
+
+    // Footer view which remains in a fixed place, under the soft keyboard on screen
+    var footerFixed: some View {
+      HStack {
+        Button(
+          action: {
+            Task {
+              try? await self.viewModel.primaryAction()
+            }
+            self.presentationMode.wrappedValue.dismiss()
+          },
+          label: {
+            Text(viewModel.config.submitButtonLabel)
+          }
+        )
+
+        .buttonStyle(
+          SubmitButtonStyle()
+        )
       }
     }
   }

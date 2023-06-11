@@ -1,4 +1,5 @@
-.PHONY: help test build
+.PHONY: help test build docs
+DOCUMENTATION_PATH?=./docs
 
 check_defined = \
     $(strip $(foreach 1,$1, \
@@ -20,3 +21,12 @@ build: ## Build the library
 lint: ## Run swift-lint to format and lint the project
 	@swift-format format -i --configuration ./.swift-format --recursive ./Sources
 	@swift-format lint --configuration ./.swift-format --recursive ./Sources
+
+docs: ## Generate DocC output
+	@swift package --allow-writing-to-directory $(DOCUMENTATION_PATH) \
+			generate-documentation \
+			--disable-indexing \
+			--transform-for-static-hosting \
+			--hosting-base-path feedbackbulb-swift \
+			--target FeedbackBulb --output-path $(DOCUMENTATION_PATH) \
+			--target FeedbackBulb.Toolbox --output-path $(DOCUMENTATION_PATH)

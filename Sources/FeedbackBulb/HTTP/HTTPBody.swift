@@ -2,12 +2,12 @@
 // Copyright (c) 2022. All rights reserved.
 
 import Foundation
-import MultipartKit
-import NIOCore
 
 internal struct HTTPBody {
+  // The payload of the request body
   internal var content: Data?
-  internal var headers: [String: String]?
+  // Header values associated with the request
+  internal var headers: [String: String]
 }
 
 extension HTTPBody {
@@ -20,25 +20,24 @@ extension HTTPBody {
     return HTTPBody(content: data, headers: headers)
   }
 
-  /// Initialize a new body for a multipart/form-data request with values from the provided parts
-  ///
-  /// - Returns: HTTPBody
-  static func multipart(_ parts: [MultipartPart], boundary: String) throws -> HTTPBody {
-    var buffer = ByteBufferAllocator().buffer(capacity: 0)
-    try MultipartSerializer().serialize(parts: parts, boundary: boundary, into: &buffer)
-    let content = Data(buffer.readableBytesView)
-    let headers = ["Content-Type": "multipart/form-data; boundary=\(boundary)"]
-    return HTTPBody(content: content, headers: headers)
+  static func subPart(variable: String, value: String) -> MultipartForm.Part {
+    .init(name: variable, value: value)
   }
 
-  /// Initialize a new body for a multipart/form-data request with values from the provided encodable object
-  ///
-  /// - Returns: HTTPBody
-  static func multipart<T: Encodable>(_ object: T, boundary: String) throws -> HTTPBody {
-    let encoded = try FormDataEncoder().encode(object, boundary: boundary)
-    let data = Data(encoded.utf8)
-    let headers = ["Content-Type": "multipart/form-data; boundary=\(boundary)"]
-    return HTTPBody(content: data, headers: headers)
+  static func subPart(field: String, fileName: String, mimeType: String, data: Data) throws
+    -> MultipartForm.Part
+  {
+    .init(name: field, data: data, filename: fileName, contentType: mimeType)
+  }
+
+  static func multipart(@MultipartFormBuilder _ builder: () throws -> [MultipartForm.Part]) rethrows
+    -> HTTPBody
+  {
+    let parts = try builder()
+    let form = MultipartForm(parts: parts)
+
+    let headers = ["Content-Type": form.contentType]
+    return HTTPBody(content: form.bodyData, headers: headers)
   }
 
   /// Initialize a new body for a application/x-www-form-urlencoded request with values from the provided URLComponents
@@ -58,4 +57,35 @@ extension HTTPBody {
     components.queryItems = queryItems
     return try form(components: components)
   }
+}
+
+@resultBuilder
+enum MultipartFormBuilder {
+  // swiftlint:disable missing_docs
+
+  static func buildExpression(_ expression: MultipartForm.Part) -> [MultipartForm.Part] {
+    return [expression]
+  }
+
+  static func buildBlock(_ components: [MultipartForm.Part]...) -> [MultipartForm.Part] {
+    return components.flatMap { $0 }
+  }
+
+  static func buildArray(_ components: [[MultipartForm.Part]]) -> [MultipartForm.Part] {
+    return components.flatMap { $0 }
+  }
+
+  // swiftlint:disable:next discouraged_optional_collection
+  static func buildOptional(_ component: [MultipartForm.Part]?) -> [MultipartForm.Part] {
+    return component ?? []
+  }
+
+  static func buildEither(first component: [MultipartForm.Part]) -> [MultipartForm.Part] {
+    return component
+  }
+
+  static func buildEither(second component: [MultipartForm.Part]) -> [MultipartForm.Part] {
+    return component
+  }
+  // swiftlint:enable missing_docs
 }

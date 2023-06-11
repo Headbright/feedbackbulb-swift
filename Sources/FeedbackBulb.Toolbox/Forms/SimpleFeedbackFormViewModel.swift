@@ -26,8 +26,9 @@ final class SimpleFeedbackFormViewModel: ObservableObject {
       client.debugOff()
     }
 
-    try await client.reportValue(
-      content: content, file: imageData, mimeType: "image/jpeg", email: email,
+    try await client.submitFeedback(
+      content: content, fileName: "image.jpg", file: imageData, mimeType: "image/jpeg",
+      email: email,
       attrs: getAttributes())
     #if os(iOS)
       await UINotificationFeedbackGenerator().notificationOccurred(.success)

@@ -20,21 +20,23 @@ let package = Package(
       targets: ["FeedbackBulb.Toolbox"]),
   ],
   dependencies: [
-    // Dependencies declare other packages that this package depends on.
-    .package(url: "https://github.com/vapor/multipart-kit", from: "4.5.2"),
     .package(url: "https://github.com/siteline/SwiftUI-Introspect", from: "0.2.3"),
+    .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.1.0")
   ],
   targets: [
     // Targets are the basic building blocks of a package. A target can define a module or a test suite.
     // Targets can depend on other targets in this package, and on products in packages this package depends on.
     .target(
-      name: "FeedbackBulb",
-      dependencies: [.product(name: "MultipartKit", package: "multipart-kit")]),
+      name: "FeedbackBulb"),
     .target(
       name: "FeedbackBulb.Toolbox",
       dependencies: ["FeedbackBulb", .product(name: "Introspect", package: "SwiftUI-Introspect")]),
     .testTarget(
       name: "FeedbackBulbTests",
-      dependencies: ["FeedbackBulb"]),
+      dependencies: ["FeedbackBulb"],
+      resources: [
+        .copy("Resources/2.png"),
+        .copy("Resources/exampleForm")
+      ]),
   ]
 )

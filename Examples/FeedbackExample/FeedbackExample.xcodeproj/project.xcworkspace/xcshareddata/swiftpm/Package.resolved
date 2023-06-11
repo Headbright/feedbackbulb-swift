@@ -1,39 +1,29 @@
 {
   "pins" : [
     {
-      "identity" : "multipart-kit",
+      "identity" : "multipartform",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vapor/multipart-kit",
+      "location" : "https://github.com/davbeck/MultipartForm",
       "state" : {
-        "revision" : "0d55c35e788451ee27222783c7d363cb88092fab",
-        "version" : "4.5.2"
+        "revision" : "50dc16e9b72215f71a61395cb31fa5511a357c40"
       }
     },
     {
-      "identity" : "swift-atomics",
+      "identity" : "swift-docc-plugin",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-atomics.git",
+      "location" : "https://github.com/apple/swift-docc-plugin",
       "state" : {
-        "revision" : "6c89474e62719ddcc1e9614989fff2f68208fe10",
-        "version" : "1.1.0"
+        "revision" : "9b1258905c21fc1b97bf03d1b4ca12c4ec4e5fda",
+        "version" : "1.2.0"
       }
     },
     {
-      "identity" : "swift-collections",
+      "identity" : "swift-docc-symbolkit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-collections.git",
+      "location" : "https://github.com/apple/swift-docc-symbolkit",
       "state" : {
-        "revision" : "937e904258d22af6e447a0b72c0bc67583ef64a2",
-        "version" : "1.0.4"
-      }
-    },
-    {
-      "identity" : "swift-nio",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-nio.git",
-      "state" : {
-        "revision" : "6213ba7a06febe8fef60563a4a7d26a4085783cf",
-        "version" : "2.54.0"
+        "revision" : "b45d1f2ed151d057b54504d653e0da5552844e34",
+        "version" : "1.0.0"
       }
     },
     {
