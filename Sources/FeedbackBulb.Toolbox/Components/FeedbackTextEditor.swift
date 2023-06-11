@@ -33,13 +33,3 @@ struct FeedbackTextEditor: View {
     .cornerRadius(8)
   }
 }
-
-struct FeedbackTextEditor_Previews: PreviewProvider {
-  static var previews: some View {
-    Group {
-      FeedbackTextEditor(label: "Feedback", text: .constant("some value"))
-      FeedbackTextEditor(label: "Feedback", text: .constant(""))
-    }
-    .previewLayout(.sizeThatFits)
-  }
-}

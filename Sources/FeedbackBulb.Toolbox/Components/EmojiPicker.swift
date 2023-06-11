@@ -89,18 +89,3 @@ struct EmojiPickerItemContent: View {
       .accessibility(label: Text(item))
   }
 }
-
-struct EmojiPickerItem_Previews: PreviewProvider {
-  static var previews: some View {
-    Group {
-      EmojiPickerItem(item: "😁", selected: false)
-      EmojiPickerItem(item: "🚀", selected: true)
-    }.previewLayout(.sizeThatFits)
-  }
-}
-
-struct EmojiPicker_Previews: PreviewProvider {
-  static var previews: some View {
-    EmojiPicker(mood: .constant(nil), items: ["😁", "🚀"])
-  }
-}

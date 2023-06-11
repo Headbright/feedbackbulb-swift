@@ -121,8 +121,9 @@ import SwiftUI
         )
         .padding()
         .background(
-          Rectangle().fill(Color(UIColor.systemBackground)).ignoresSafeArea(
-            .container, edges: .bottom)
+          Rectangle()
+            .fill(Color(UIColor.systemBackground))
+            .ignoresSafeArea(.all, edges: .bottom)
         )
         .shadow(color: Color.black.opacity(0.16), radius: 6, x: 0, y: 3)
       }
@@ -177,12 +178,6 @@ import SwiftUI
           )
         )
       }
-    }
-  }
-
-  struct SimpleFeedbackForm_Previews: PreviewProvider {
-    static var previews: some View {
-      SimpleFeedbackForm(appKey: "")
     }
   }
 #endif
