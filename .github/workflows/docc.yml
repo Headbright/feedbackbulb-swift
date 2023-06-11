@@ -2,12 +2,6 @@ name: Docs
 
 on:
   workflow_dispatch:
-  push:
-    branches: ["main"]
-    paths-ignore:
-      - "*.md"
-      - ".vscode"
-      - ".nova"
 
 jobs:
   make-docs:
