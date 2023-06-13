@@ -7,54 +7,58 @@
 
 import SwiftUI
 
-/// ImagePicker implementation that can be used for iOS 15.
-///
-/// Code snippet based on https://designcode.io/swiftui-advanced-handbook-imagepicker
-struct SelectImageLegacy: UIViewControllerRepresentable {
-  @Environment(\.presentationMode) private var presentationMode
-  var sourceType: UIImagePickerController.SourceType = .photoLibrary
-  @Binding var selectedImage: UIImage?
+#if canImport(UIKit)
 
-  func makeUIViewController(context: UIViewControllerRepresentableContext<SelectImageLegacy>)
-    -> UIImagePickerController
-  {
+  /// ImagePicker implementation that can be used for iOS 15.
+  ///
+  /// Code snippet based on https://designcode.io/swiftui-advanced-handbook-imagepicker
+  struct SelectImageLegacy: UIViewControllerRepresentable {
+    @Environment(\.presentationMode) private var presentationMode
+    var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    @Binding var selectedImage: UIImage?
 
-    let imagePicker = UIImagePickerController()
-    imagePicker.allowsEditing = false
-    imagePicker.sourceType = sourceType
-    imagePicker.delegate = context.coordinator
+    func makeUIViewController(context: UIViewControllerRepresentableContext<SelectImageLegacy>)
+      -> UIImagePickerController
+    {
 
-    return imagePicker
-  }
+      let imagePicker = UIImagePickerController()
+      imagePicker.allowsEditing = false
+      imagePicker.sourceType = sourceType
+      imagePicker.delegate = context.coordinator
 
-  func updateUIViewController(
-    _ uiViewController: UIImagePickerController,
-    context: UIViewControllerRepresentableContext<SelectImageLegacy>
-  ) {
-
-  }
-
-  func makeCoordinator() -> Coordinator {
-    Coordinator(self)
-  }
-
-  final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate
-  {
-
-    var parent: SelectImageLegacy
-
-    init(_ parent: SelectImageLegacy) {
-      self.parent = parent
+      return imagePicker
     }
 
-    func imagePickerController(
-      _ picker: UIImagePickerController,
-      didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+    func updateUIViewController(
+      _ uiViewController: UIImagePickerController,
+      context: UIViewControllerRepresentableContext<SelectImageLegacy>
     ) {
 
-      parent.selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
-      parent.presentationMode.wrappedValue.dismiss()
     }
 
+    func makeCoordinator() -> Coordinator {
+      Coordinator(self)
+    }
+
+    final class Coordinator: NSObject, UIImagePickerControllerDelegate,
+      UINavigationControllerDelegate
+    {
+
+      var parent: SelectImageLegacy
+
+      init(_ parent: SelectImageLegacy) {
+        self.parent = parent
+      }
+
+      func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+      ) {
+
+        parent.selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        parent.presentationMode.wrappedValue.dismiss()
+      }
+
+    }
   }
-}
+#endif

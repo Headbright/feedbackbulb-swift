@@ -6,7 +6,6 @@
 //
 
 import FeedbackBulb
-import Introspect
 import SwiftUI
 
 struct FeedbackTextEditor: View {
@@ -23,13 +22,15 @@ struct FeedbackTextEditor: View {
         .fixedSize(horizontal: false, vertical: true)
         .id(text)
 
-      TextEditor(text: $text)
-        .introspectTextView(customize: { tv in
-          #if canImport(UIKit)
-            tv.isScrollEnabled = false
-          #endif
-        })
-        .accessibility(label: Text(label))
+      if #available(iOS 16.0, *) {
+        TextEditor(text: $text)
+          .scrollDisabled(true)
+          .accessibility(label: Text(label))
+      } else {
+        TextEditor(text: $text)
+          .accessibility(label: Text(label))
+      }
+
     }
     .cornerRadius(8)
   }

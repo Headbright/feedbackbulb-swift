@@ -7,7 +7,7 @@ let package = Package(
   name: "FeedbackBulb",
   platforms: [
     .iOS(.v15),
-    .macCatalyst(.v16),
+    .macCatalyst(.v15),
     .macOS(.v13),
   ],
   products: [
@@ -19,9 +19,7 @@ let package = Package(
       name: "FeedbackBulb.Toolbox",
       targets: ["FeedbackBulb.Toolbox"]),
   ],
-  dependencies: [
-    .package(url: "https://github.com/siteline/SwiftUI-Introspect", from: "0.2.3")
-  ],
+  dependencies: [],
   targets: [
     // Targets are the basic building blocks of a package. A target can define a module or a test suite.
     // Targets can depend on other targets in this package, and on products in packages this package depends on.
@@ -29,7 +27,7 @@ let package = Package(
       name: "FeedbackBulb"),
     .target(
       name: "FeedbackBulb.Toolbox",
-      dependencies: ["FeedbackBulb", .product(name: "Introspect", package: "SwiftUI-Introspect")]),
+      dependencies: ["FeedbackBulb"]),
     .testTarget(
       name: "FeedbackBulbTests",
       dependencies: ["FeedbackBulb"],
