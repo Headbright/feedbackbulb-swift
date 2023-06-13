@@ -13,7 +13,7 @@ import SwiftUI
   public struct SimpleFeedbackForm: View {
     @StateObject var viewModel: SimpleFeedbackFormViewModel
     @StateObject var imageModel = SelectImageModel()
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     public var body: some View {
       ZStack(alignment: .bottom) {
@@ -128,7 +128,7 @@ import SwiftUI
             Task {
               try? await self.viewModel.primaryAction()
             }
-            self.presentationMode.wrappedValue.dismiss()
+            self.dismiss()
           },
           label: {
             Text(viewModel.config.submitButtonLabel)
@@ -155,7 +155,7 @@ import SwiftUI
             Task {
               try? await self.viewModel.primaryAction()
             }
-            self.presentationMode.wrappedValue.dismiss()
+            self.dismiss()
           },
           label: {
             Text(viewModel.config.submitButtonLabel)
@@ -170,11 +170,17 @@ import SwiftUI
   }
 
   extension SimpleFeedbackForm {
-    public init(appKey: String) {
-      self.init(viewModel: SimpleFeedbackFormViewModel(appKey: appKey))
+    public init(appKey: String, onFeedbackReported: (() -> Void)? = nil) {
+      self.init(
+        viewModel: SimpleFeedbackFormViewModel(
+          appKey: appKey, onFeedbackReported: onFeedbackReported))
     }
-    public init(appKey: String, config: SimpleFeedbackConfig) {
-      self.init(viewModel: SimpleFeedbackFormViewModel(appKey: appKey, config))
+    public init(
+      appKey: String, config: SimpleFeedbackConfig, onFeedbackReported: (() -> Void)? = nil
+    ) {
+      self.init(
+        viewModel: SimpleFeedbackFormViewModel(
+          appKey: appKey, config, onFeedbackReported: onFeedbackReported))
     }
   }
 

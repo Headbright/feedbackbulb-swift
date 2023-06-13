@@ -12,9 +12,15 @@ final class SimpleFeedbackFormViewModel: ObservableObject {
   let appKey: String
   let config: SimpleFeedbackConfig
 
-  init(appKey: String, _ config: SimpleFeedbackConfig = SimpleFeedbackConfig()) {
+  var onFeedbackReported: (() -> Void)?
+
+  init(
+    appKey: String, _ config: SimpleFeedbackConfig = SimpleFeedbackConfig(),
+    onFeedbackReported: (() -> Void)? = nil
+  ) {
     self.appKey = appKey
     self.config = config
+    self.onFeedbackReported = onFeedbackReported
   }
 
   func primaryAction() async throws {
@@ -33,6 +39,7 @@ final class SimpleFeedbackFormViewModel: ObservableObject {
     #if os(iOS)
       await UINotificationFeedbackGenerator().notificationOccurred(.success)
     #endif
+    onFeedbackReported?()
   }
 
   private func getAttributes() -> [String: String] {

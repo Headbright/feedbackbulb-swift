@@ -24,7 +24,9 @@ struct Example1: View {
   var body: some View {
     NavigationStack {
       //TODO: - Replace with your API key
-        SimpleFeedbackForm(appKey: "01b7f627-37c0-43f8-8815-2d730f55134b", config: .init(title: "Hello", subtitle: "How do you feel about our app?", textDescription: "", showEmojiPicker: true, emojiPickerLabel: ""))
+        SimpleFeedbackForm(appKey: "01b7f627-37c0-43f8-8815-2d730f55134b", config: .init(title: "Hello", subtitle: "How do you feel about our app?", textDescription: "", showEmojiPicker: true, emojiPickerLabel: ""), onFeedbackReported: {
+            print("feedback submitted")
+        })
             .accentColor(.purple)
         .toolbar {
           ToolbarItem(placement: .cancellationAction) {
