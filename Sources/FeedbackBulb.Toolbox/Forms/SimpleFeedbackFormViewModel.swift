@@ -47,7 +47,7 @@ final class SimpleFeedbackFormViewModel: ObservableObject {
       "model": Self.modelName,
     ]
 
-    if config.showEmojiPicker, let emoji = self.emoji {
+    if config.showEmojiPicker, emoji != "" {
       attrs["emoji"] = emoji
     }
 
@@ -57,7 +57,7 @@ final class SimpleFeedbackFormViewModel: ObservableObject {
   @Published var content: String = ""
   @Published var email: String = ""
   @Published var imageData: Data? = nil
-  @Published var emoji: String? = nil
+  @Published var emoji: String = ""
 
   /// The modelname as reported by systemInfo.machine
   /// source: https://github.com/TelemetryDeck/SwiftClient

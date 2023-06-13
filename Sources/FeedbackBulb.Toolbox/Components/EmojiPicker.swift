@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EmojiPicker: View {
-  @Binding var mood: String?
+  @Binding var mood: String
 
   let items: [String]
   let columns = [
@@ -35,6 +35,15 @@ struct EmojiPicker: View {
         .frame(width: 72, height: 72)
       }
     }
+    .accessibilityRepresentation(representation: {
+      Picker("Select emoji", selection: self.$mood) {
+        ForEach(self.items, id: \.self) { emoji in
+          Text(emoji).tag(emoji)
+        }
+
+      }
+
+    })
   }
 }
 
