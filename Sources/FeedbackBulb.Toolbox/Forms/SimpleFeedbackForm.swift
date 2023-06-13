@@ -84,6 +84,7 @@ import SwiftUI
           }
           .padding(.horizontal)
           .if(viewModel.config.pinSubmitButton, transform: { $0.padding(.bottom, 120) })
+          .if(!viewModel.config.pinSubmitButton, transform: { $0.padding(.bottom) })
         }
         .if(viewModel.config.pinSubmitButton, transform: { $0.alwaysBounceVertical(false) })
 
