@@ -10,6 +10,7 @@
   import PhotosUI
   import SwiftUI
 
+  @available(iOS 16.0, *)
   struct SelectImage: View {
     let imageState: SelectImageModel.ImageState
 
@@ -31,6 +32,7 @@
     }
   }
 
+  @available(iOS 16.0, *)
   struct SquareSelectImage: View {
     let imageState: SelectImageModel.ImageState
 
@@ -43,30 +45,34 @@
     }
   }
 
+  @available(iOS 16.0, *)
   struct EditableSquareSelectImage: View {
     @ObservedObject var viewModel: SelectImageModel
 
     var body: some View {
-      SquareSelectImage(imageState: viewModel.imageState)
-        .overlay(alignment: .bottomTrailing) {
-          PhotosPicker(
-            selection: $viewModel.imageSelection,
-            matching: .images,
-            photoLibrary: .shared()
-          ) {
+      PhotosPicker(
+        selection: $viewModel.imageSelection,
+        matching: .images,
+        photoLibrary: .shared()
+      ) {
+        SquareSelectImage(imageState: viewModel.imageState)
+          .overlay(alignment: .bottomTrailing) {
             Image(systemName: "pencil.circle.fill")
               .controlSize(.large)
               .symbolRenderingMode(.multicolor)
               .font(.system(size: 30))
               .foregroundColor(.accentColor)
           }
-          .buttonStyle(.borderless)
-        }
+
+      }
+      .buttonStyle(.borderless)
+
     }
   }
 
+  @available(iOS 16.0, *)
   @MainActor
-  class SelectImageModel: ObservableObject {
+  final class SelectImageModel: ObservableObject {
     enum ImageState {
       case empty
       case loading(Progress)
@@ -132,4 +138,5 @@
       }
     }
   }
+
 #endif

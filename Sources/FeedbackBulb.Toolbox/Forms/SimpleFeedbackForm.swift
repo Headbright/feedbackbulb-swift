@@ -12,7 +12,6 @@ import SwiftUI
 
   public struct SimpleFeedbackForm: View {
     @StateObject var viewModel: SimpleFeedbackFormViewModel
-    @StateObject var imageModel = SelectImageModel()
     @Environment(\.dismiss) private var dismiss
 
     public var body: some View {
@@ -75,7 +74,7 @@ import SwiftUI
                     .bold()
                 }
 
-                EditableSquareSelectImage(viewModel: imageModel)
+                AttachmentPicker(onAttachmentSelected: { viewModel.imageData = $0 })
               }
             }
 
@@ -87,11 +86,6 @@ import SwiftUI
           .if(viewModel.config.pinSubmitButton, transform: { $0.padding(.bottom, 120) })
         }
         .if(viewModel.config.pinSubmitButton, transform: { $0.alwaysBounceVertical(false) })
-        .onChange(
-          of: imageModel.imageData,
-          perform: { data in
-            viewModel.imageData = data
-          })
 
         if viewModel.config.pinSubmitButton {
           self.footer

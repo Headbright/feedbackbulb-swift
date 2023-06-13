@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
   name: "FeedbackBulb",
   platforms: [
-    .iOS(.v16),
+    .iOS(.v15),
     .macCatalyst(.v16),
     .macOS(.v13),
   ],

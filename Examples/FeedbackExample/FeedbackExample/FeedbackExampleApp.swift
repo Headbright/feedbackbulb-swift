@@ -11,8 +11,14 @@ import SwiftUI
 struct FeedbackExampleApp: App {
   var body: some Scene {
     WindowGroup {
-      NavigationStack {
-        SimpleFeedbackFormExample()
+      if #available(iOS 16.0, *) {
+        NavigationStack {
+          SimpleFeedbackFormExample()
+        }
+      } else {
+        NavigationView {
+          SimpleFeedbackFormExample()
+        }
       }
     }
   }

@@ -28,7 +28,7 @@ struct EmojiPicker: View {
           },
           label: {
             EmojiPickerItem(item: emoji, selected: mood == emoji)
-              .id("\(emoji)\(mood ?? "")")
+              .id("\(emoji)\(mood)")
           }
         )
         .buttonStyle(PlainButtonStyle())
