@@ -22,15 +22,15 @@ struct FeedbackTextEditor: View {
         .fixedSize(horizontal: false, vertical: true)
         .id(text)
 
-      if #available(iOS 16.0, *) {
-        TextEditor(text: $text)
-          .scrollDisabled(true)
-          .accessibility(label: Text(label))
-      } else {
-        TextEditor(text: $text)
-          .accessibility(label: Text(label))
+        if #available(iOS 16.0, *) {
+            TextEditor(text: $text)
+                .scrollDisabled(true)
+                .accessibility(label: Text(label))
+                .textEditorBackground({ Color(UIColor.secondarySystemGroupedBackground) })
+            TextEditor(text: $text)
+                .accessibility(label: Text(label))
+                .textEditorBackground({ Color(UIColor.secondarySystemGroupedBackground) })
       }
-
     }
     .cornerRadius(8)
   }
