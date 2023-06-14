@@ -7,21 +7,29 @@
 
 import SwiftUI
 
+struct TextEditorModifiers: ViewModifier {
+  @ViewBuilder
+  func body(content: Content) -> some View {
+    content
+    .scrollableSupportingDarkMode()
+    #if canImport(UIKit)
+      .background(content: { Color(UIColor.secondarySystemGroupedBackground) })
+    #endif
+  }
+}
+
 extension View {
-    
-    private func transparentScrolling() -> some View {
-        if #available(iOS 16.0, *) {
-            return scrollContentBackground(.hidden)
-        } else {
-            return onAppear {
-                UITextView.appearance().backgroundColor = .clear
-            }
-        }
+  @ViewBuilder
+  func scrollableSupportingDarkMode() -> some View {
+    if #available(iOS 16.0, *) {
+      self.scrollDisabled(true)
+      self.scrollContentBackground(.hidden)
+    } else {
+      self.onAppear {
+        #if canImport(UIKit)
+          UITextView.appearance().backgroundColor = .clear
+        #endif
+      }
     }
-    
-    internal func textEditorBackground<V>(@ViewBuilder _ background: () -> V) -> some View where V: View {
-        self
-            .transparentScrolling()
-            .background(background())
-    }
+  }
 }
