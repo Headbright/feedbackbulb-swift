@@ -4,6 +4,7 @@ import Foundation
   import FoundationNetworking
 #endif
 
+/// Http client to communicate with FeedbackBulb's REST API
 public struct FeedbackSDKClient {
   /// The URL of the instance we're connected to
   public var instanceURL: URL

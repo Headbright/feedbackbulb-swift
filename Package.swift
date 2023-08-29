@@ -24,16 +24,16 @@ let package = Package(
     // Targets are the basic building blocks of a package. A target can define a module or a test suite.
     // Targets can depend on other targets in this package, and on products in packages this package depends on.
     .target(
-      name: "FeedbackBulb"),
+      name: "FeedbackBulb", resources: [.copy("PrivacyInfo.xcprivacy")]),
     .target(
       name: "FeedbackBulb.Toolbox",
-      dependencies: ["FeedbackBulb"]),
+      dependencies: ["FeedbackBulb"], resources: [.copy("PrivacyInfo.xcprivacy")]),
     .testTarget(
       name: "FeedbackBulbTests",
       dependencies: ["FeedbackBulb"],
       resources: [
         .copy("Resources/2.png"),
-        .copy("Resources/exampleForm")
+        .copy("Resources/exampleForm"),
       ]),
   ]
 )
