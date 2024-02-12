@@ -120,6 +120,8 @@ final class SimpleFeedbackFormViewModel: ObservableObject {
       return "watchOS"
     #elseif os(tvOS)
       return "tvOS"
+    #elseif os(visionOS)
+      return "visionOS"
     #else
       return "Unknown Operating System"
     #endif
