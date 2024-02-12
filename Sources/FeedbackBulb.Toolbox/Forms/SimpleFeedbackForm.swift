@@ -94,7 +94,6 @@ import SwiftUI
 
       }
       .background(Color(UIColor.systemGroupedBackground))
-      .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
     }
 
     var title: some View {

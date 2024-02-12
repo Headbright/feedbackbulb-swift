@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B50032F72A0A2DF900005BFD /* FeedbackBulb.Toolbox in Frameworks */ = {isa = PBXBuildFile; productRef = B50032F62A0A2DF900005BFD /* FeedbackBulb.Toolbox */; };
+		B59758742B7A6B0C00EEB6AF /* FeedbackBulb in Frameworks */ = {isa = PBXBuildFile; productRef = B59758732B7A6B0C00EEB6AF /* FeedbackBulb */; };
+		B59758762B7A6B0C00EEB6AF /* FeedbackBulb.Toolbox in Frameworks */ = {isa = PBXBuildFile; productRef = B59758752B7A6B0C00EEB6AF /* FeedbackBulb.Toolbox */; };
 		B5D2BBE829B3A83A00E57A18 /* FeedbackExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D2BBE729B3A83A00E57A18 /* FeedbackExampleApp.swift */; };
 		B5D2BBEA29B3A83A00E57A18 /* SimpleFeedbackFormExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D2BBE929B3A83A00E57A18 /* SimpleFeedbackFormExample.swift */; };
 		B5D2BBEC29B3A83C00E57A18 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5D2BBEB29B3A83C00E57A18 /* Assets.xcassets */; };
@@ -15,7 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B50032F32A0A2DDC00005BFD /* zofx-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "zofx-swift"; path = ../..; sourceTree = "<group>"; };
+		B59758782B7A6B5000EEB6AF /* feedbackbulb-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "feedbackbulb-swift"; path = ../..; sourceTree = "<group>"; };
 		B5D2BBE429B3A83A00E57A18 /* FeedbackExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedbackExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5D2BBE729B3A83A00E57A18 /* FeedbackExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackExampleApp.swift; sourceTree = "<group>"; };
 		B5D2BBE929B3A83A00E57A18 /* SimpleFeedbackFormExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleFeedbackFormExample.swift; sourceTree = "<group>"; };
@@ -29,7 +30,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B50032F72A0A2DF900005BFD /* FeedbackBulb.Toolbox in Frameworks */,
+				B59758742B7A6B0C00EEB6AF /* FeedbackBulb in Frameworks */,
+				B59758762B7A6B0C00EEB6AF /* FeedbackBulb.Toolbox in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -39,7 +41,7 @@
 		B5D2BBDB29B3A83900E57A18 = {
 			isa = PBXGroup;
 			children = (
-				B50032F32A0A2DDC00005BFD /* zofx-swift */,
+				B59758782B7A6B5000EEB6AF /* feedbackbulb-swift */,
 				B5D2BBE629B3A83A00E57A18 /* FeedbackExample */,
 				B5D2BBE529B3A83A00E57A18 /* Products */,
 				B5D2BBF829B3A95800E57A18 /* Frameworks */,
@@ -98,7 +100,8 @@
 			);
 			name = FeedbackExample;
 			packageProductDependencies = (
-				B50032F62A0A2DF900005BFD /* FeedbackBulb.Toolbox */,
+				B59758732B7A6B0C00EEB6AF /* FeedbackBulb */,
+				B59758752B7A6B0C00EEB6AF /* FeedbackBulb.Toolbox */,
 			);
 			productName = FeedbackExample;
 			productReference = B5D2BBE429B3A83A00E57A18 /* FeedbackExample.app */;
@@ -112,7 +115,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					B5D2BBE329B3A83900E57A18 = {
 						CreatedOnToolsVersion = 14.2;
@@ -129,6 +132,7 @@
 			);
 			mainGroup = B5D2BBDB29B3A83900E57A18;
 			packageReferences = (
+				B59758722B7A6B0C00EEB6AF /* XCRemoteSwiftPackageReference "feedbackbulb-swift" */,
 			);
 			productRefGroup = B5D2BBE529B3A83A00E57A18 /* Products */;
 			projectDirPath = "";
@@ -201,6 +205,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -260,6 +265,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -376,9 +382,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		B59758722B7A6B0C00EEB6AF /* XCRemoteSwiftPackageReference "feedbackbulb-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Headbright/feedbackbulb-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
-		B50032F62A0A2DF900005BFD /* FeedbackBulb.Toolbox */ = {
+		B59758732B7A6B0C00EEB6AF /* FeedbackBulb */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = B59758722B7A6B0C00EEB6AF /* XCRemoteSwiftPackageReference "feedbackbulb-swift" */;
+			productName = FeedbackBulb;
+		};
+		B59758752B7A6B0C00EEB6AF /* FeedbackBulb.Toolbox */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B59758722B7A6B0C00EEB6AF /* XCRemoteSwiftPackageReference "feedbackbulb-swift" */;
 			productName = FeedbackBulb.Toolbox;
 		};
 /* End XCSwiftPackageProductDependency section */
