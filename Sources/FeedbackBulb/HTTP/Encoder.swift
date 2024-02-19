@@ -4,6 +4,7 @@
 import Foundation
 
 internal final class FeedbackSDKEncoder: JSONEncoder {
+  /// Creates a new instance of `FeedbackSDKEncoder`
   public override init() {
     super.init()
     keyEncodingStrategy = .convertToSnakeCase

@@ -19,6 +19,7 @@ public struct FeedbackSDKClient {
   internal var session: URLSession
   internal let validStatusCodes = 200..<300
 
+  /// Creates a new instance of `FeedbackSDKClient` which can be used to submit feedback reports. You can provide your own URLSession which will be used to submit the report (e.g. in case of background submissions) and also customize the instance of Feedbackbulb which can receive the report.
   public init(
     appKey: String
   ) {
@@ -27,6 +28,7 @@ public struct FeedbackSDKClient {
     self.appKey = appKey
   }
 
+  /// Creates a new instance of `FeedbackSDKClient` which can be used to submit feedback reports.
   public init(
     appKey: String,
     session: URLSession = URLSession.shared,
@@ -154,6 +156,13 @@ extension FeedbackSDKClient {
 
 extension FeedbackSDKClient {
 
+  /// Submits a new feedback report with the provided content.
+  /// - Parameters:
+  ///   - content: The text form of a feedback report. Usually a user-provided comment.
+  ///   - attrs: A dictionary of string value attributes describing the environment of the user as well as the current state of the app. Attributes are visible in the feedback stream on feedbackbulb.com.
+  ///
+  ///  - Discussion:
+  ///   The attributes are not intended to include personally identifiable information
   public func submitFeedback(content: String, attrs: [String: String]? = nil) async throws {
     let req = HTTPRequestBuilder {
       $0.url = getURL(["api", "values"])
@@ -173,6 +182,17 @@ extension FeedbackSDKClient {
     let _ = try await fetch(req: req)
   }
 
+  /// Submits a new feedback report with the provided content and file attachment
+  /// - Parameters:
+  ///   - content: The text form of a feedback report. Usually a user-provided comment.
+  ///   - fileName: Name of the file attachment including the extension e.g. `screenshot.jpeg`
+  ///   - file: The contents of the file attachment. For example, the jpeg representation of an image.
+  ///   - mimeType: The mime type (written as a web Content-Type) of the attachment e.g."image/jpeg"
+  ///   - email: The email address of the user which can be used for email replies. Only include this if you have received informed opt-in concent from the user.
+  ///   - attrs: A dictionary of string value attributes describing the environment of the user as well as the current state of the app. Attributes are visible in the feedback stream on feedbackbulb.com.
+  ///
+  ///  - Discussion:
+  ///   The attributes are not intended to include personally identifiable information
   public func submitFeedback(
     content: String, fileName: String, file: Data? = nil, mimeType: String? = nil,
     email: String? = nil,
