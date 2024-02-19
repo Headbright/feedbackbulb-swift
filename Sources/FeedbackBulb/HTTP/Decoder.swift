@@ -4,6 +4,7 @@
 import Foundation
 
 internal final class FeedbackSDKDecoder: JSONDecoder {
+  /// Creates a new FeedbackSDKDecoder
   internal override init() {
     super.init()
     keyDecodingStrategy = .convertFromSnakeCase

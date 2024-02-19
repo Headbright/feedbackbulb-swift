@@ -1,3 +1,4 @@
+// swift-format-ignore: NoBlockComments
 /*
 Multipart support is provided by the https://github.com/davbeck/MultipartForm package which has been incorported as part of the source code of this library.
 
