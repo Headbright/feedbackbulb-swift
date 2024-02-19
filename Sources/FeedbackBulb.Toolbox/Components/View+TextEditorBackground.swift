@@ -11,10 +11,10 @@ struct TextEditorModifiers: ViewModifier {
   @ViewBuilder
   func body(content: Content) -> some View {
     content
-    .scrollableSupportingDarkMode()
-    #if canImport(UIKit)
-      .background(content: { Color(UIColor.secondarySystemGroupedBackground) })
-    #endif
+      .scrollableSupportingDarkMode()
+      #if canImport(UIKit)
+        .background(content: { Color(UIColor.secondarySystemGroupedBackground) })
+      #endif
   }
 }
 

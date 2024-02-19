@@ -20,6 +20,14 @@ public struct FeedbackSDKClient {
   internal let validStatusCodes = 200..<300
 
   public init(
+    appKey: String
+  ) {
+    self.session = URLSession.shared
+    self.instanceURL = URL(string: "https://feedbackbulb.com")!
+    self.appKey = appKey
+  }
+
+  public init(
     appKey: String,
     session: URLSession = URLSession.shared,
     instanceURL: URL
