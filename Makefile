@@ -20,6 +20,8 @@ build: ## Build the library
 
 lint: ## Run swift-lint to format and lint the project
 	@swift-format format -i --configuration ./.swift-format --recursive ./Sources
+	@swift-format format -i --configuration ./.swift-format --recursive ./Tests
+	@swift-format format -i --configuration ./.swift-format --recursive ./Examples
 	@swift-format lint --configuration ./.swift-format --recursive ./Sources
 
 docs: ## Generate DocC output
