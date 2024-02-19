@@ -25,7 +25,7 @@ final class SimpleFeedbackFormViewModel: ObservableObject {
 
   func primaryAction() async throws {
     var client = FeedbackSDKClient(
-      appKey: appKey, instanceURL: URL(string: "https://feedbackbulb.com")!)
+      appKey: appKey)
     if config.debugRequests {
       client.debugOn()
     } else {
