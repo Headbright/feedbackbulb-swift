@@ -13,11 +13,11 @@ struct FeedbackExampleApp: App {
     WindowGroup {
       if #available(iOS 16.0, *) {
         NavigationStack {
-          SimpleFeedbackFormExample()
+          SelectExampleView()
         }
       } else {
         NavigationView {
-          SimpleFeedbackFormExample()
+          SelectExampleView()
         }
       }
     }
